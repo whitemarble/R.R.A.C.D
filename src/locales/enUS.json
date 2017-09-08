@@ -1,0 +1,9 @@
+{
+    "login_username":"Username",
+    "login_password":"Password",
+    "password_fail":"Please input your Password!",
+    "username_fail":"Please input your username!",
+    "login_button":"Login",
+    "login_noresponse":"Server no response",
+    "login_incorrect":"Incorrect username or password"
+}

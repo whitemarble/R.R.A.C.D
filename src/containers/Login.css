@@ -1,0 +1,25 @@
+.login-wrap{
+    position: absolute;
+    top:25%;
+    width:100%
+}
+
+.login-form {
+    position:relative;
+    max-width: 300px;
+    margin:auto;
+    text-align:left
+}
+.login-form-forgot {
+    float:right
+}
+.login-form-button {
+    width: 100%;
+}
+
+.login-error{
+    text-align:center;
+    color:red;
+    padding:10px
+}
+

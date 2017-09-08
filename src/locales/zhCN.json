@@ -1,0 +1,9 @@
+{
+    "login_username":"用户名",
+    "login_password":"密码",
+    "password_fail":"请输入密码！",
+    "username_fail":"请输入用户名！",
+    "login_button":"登陆",
+    "login_noresponse":"服务器没响应",
+    "login_incorrect":"用户名或密码不正确"
+}

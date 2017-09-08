@@ -1,0 +1,28 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
+    <link rel="stylesheet" href="%PUBLIC_URL%/css/font-awesome.min.css">
+    
+    <title>React App</title>
+  </head>
+  <body>
+    <noscript>
+      You need to enable JavaScript to run this app.
+    </noscript>
+    <div id="root"></div>
+
+    <script>
+      // 国际化polyfill
+      // 我们这里采用的做法是直接判断 window.Intl 是否存在，从而确定是否要引入 polyfill 文件
+      if (!window.Intl) {
+        document.writeln('<script src="/js/Intl.js">' + '<' + '/script>');
+        document.writeln('<script src="/js/en.js">' + '<' + '/script>');
+        document.writeln('<script src="/js/zh.js">' + '<' + '/script>');
+      }
+    </script>
+    
+  </body>
+</html>
