@@ -9,18 +9,21 @@ const LoginReducer = (state=initialState,action)=>{
         if(action.payload.data === undefined)
             return {
                 token: "",
-                message: "NoResponse"
+                message: "NoResponse",
+                loading:false
             };
         else{
             if(action.payload.data.code === 200)
                 return {
                     token: action.payload.data.token,
-                    message: "Success"
+                    message: "Success",
+                    loading:false
                 };
             else
                 return {
                     token: "",
-                    message: "Incorrect"
+                    message: "Incorrect",
+                    loading:false
                 };
         }
             

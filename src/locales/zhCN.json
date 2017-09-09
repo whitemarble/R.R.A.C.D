@@ -5,5 +5,7 @@
     "username_fail":"请输入用户名！",
     "login_button":"登陆",
     "login_noresponse":"服务器没响应",
-    "login_incorrect":"用户名或密码不正确"
+    "login_incorrect":"用户名或密码不正确",
+    "login_title":"请登录",
+    "login_title_expired":"请登录（认证已过期）"
 }

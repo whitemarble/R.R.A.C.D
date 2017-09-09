@@ -5,5 +5,7 @@
     "username_fail":"Please input your username!",
     "login_button":"Login",
     "login_noresponse":"Server no response",
-    "login_incorrect":"Incorrect username or password"
+    "login_incorrect":"Incorrect username or password",
+    "login_title":"Please Login",
+    "login_title_expired":"Please Login (authentication expired)"
 }

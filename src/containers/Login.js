@@ -1,30 +1,69 @@
 import React, { Component } from 'react';
 import { Form, Icon, Input, Button } from 'antd';
-import {bindActionCreators} from 'redux';
-import { connect } from 'react-redux';
 import {injectIntl} from 'react-intl';
 import {Redirect} from 'react-router-dom';
-//import bcrypt from 'bcryptjs';
+import rp from 'axios';
+import checktoken from '../checktoken';
+//import localStorage from 'localStorage';
 
-import {loginClicked} from '../actions/LoginAction'
 import './Login.css'
 
-
+//let localStorage = new Storage(null, { strict: true });
 const FormItem = Form.Item;
 
 class Login extends Component {
-    handleSubmit = (e) => {
-        const{loginClick} = this.props;
+    state = {
+        iconLoading: false,
+        response:" ",
+        token:false,
+        expired:false
+    }
+
+    handleSubmit = (e) => {  
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
           if (!err) {
-            //console.log('Received values of form: ', values);
-            //let salt = bcrypt.genSaltSync(10);
-            //let hashedPass = bcrypt.hashSync(values.password, salt);
-            loginClick(values.username,values.password);
-            //console.log('hashedPass: ', hashedPass);
+            this.setState({ iconLoading: true,response:"" });
+            rp.post('http://localhost:443/login',{username:values.username,password:values.password})
+            .then((result)=>{
+                console.log(result.data)
+                if(result.data === undefined)
+                    this.setState({ 
+                        response: "NoResponse",
+                        token:false,
+                        iconLoading:false
+                    });
+                else{
+                    if(result.data.code === 200){
+                        //localStorage.setItem('token',result.data.token)
+                        sessionStorage.setItem('token',result.data.token);
+                        this.setState({ 
+                            response: "Success",
+                            token:true,
+                            iconLoading:false
+                        });
+                    }
+                        
+                    else
+                        this.setState({ 
+                            response: "Incorrect",
+                            token:false,
+                            iconLoading:false
+                        });
+                }
+            })
           }
         });
+    }
+
+    componentDidMount = async ()=>{
+        let result = await checktoken(localStorage.getItem('token'));
+        if(result)
+            this.setState({token:true})
+        else
+            this.setState({token:false})
+        console.log(this.props.location)
+        console.log(this.state)
     }
 
     render() {
@@ -37,25 +76,36 @@ class Login extends Component {
         const login_button = intl.formatMessage({ id: 'login_button', defaultMessage: 'Login' });
         const login_noresponse = intl.formatMessage({ id: 'login_noresponse', defaultMessage: 'Server no response' });
         const login_incorrect = intl.formatMessage({ id: 'login_incorrect', defaultMessage: 'Incorrect username or password' });
+        const login_title = intl.formatMessage({ id: 'login_title', defaultMessage: 'Please Login' });
+        const login_title_expired = intl.formatMessage({ id: 'login_title_expired', defaultMessage: 'Please Login (authentication expired)' });
 
         //设置登陆后跳转页面
-        const { from } = this.props.location.state || { from: { pathname: '/' } }
-        if (this.props.token !== "") {
+        let from = "";
+        if(typeof(this.props.location.state)!=="undefined")
+            from = this.props.location.state.from
+        else from = "/"
+        if (this.state.token === true) {
             return (
-              <Redirect to={ from } />
+            <Redirect to={from} />
             )
         }
 
         const error_message = ()=>{
-            if(this.props.message === "NoResponse")
+            //console.log("dddd")
+            if(this.state.response === "NoResponse")
                 return login_noresponse;
-            else if(this.props.message === "Incorrect")
+            else if(this.state.response === "Incorrect")
                 return login_incorrect;
-            else return "";
+            else return " ";
+        }
+
+        const my_title = ()=>{
+            return login_title;
         }
 
         return (
             <div className="login-wrap">
+                <h2 className="login-title">{my_title()}</h2>
                 <p className="login-error">{error_message()}</p>
             <Form onSubmit={this.handleSubmit} className="login-form">
                 <FormItem>
@@ -80,7 +130,7 @@ class Login extends Component {
                     <Checkbox>Remember me</Checkbox>
                 )}
                 <a className="login-form-forgot" href="">Forgot password</a>*/}
-                <Button type="primary" htmlType="submit" className="login-form-button" >
+                <Button type="primary" htmlType="submit" className="login-form-button" icon="poweroff" loading={this.state.iconLoading}>
                     {login_button}
                 </Button>
                 {/*Or <a href="">register now!</a>*/}
@@ -92,18 +142,4 @@ class Login extends Component {
     }
 }
 
-const mapStateToProps = (state) => {
-    return {
-        token: state.LoginReducer.token,
-        message: state.LoginReducer.message
-    }
-}
-  
-const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({loginClick:loginClicked}, dispatch);
-}
-
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(injectIntl(Form.create()(Login)));
+export default injectIntl(Form.create()(Login));
