@@ -35,8 +35,8 @@ class Login extends Component {
                     });
                 else{
                     if(result.data.code === 200){
-                        //localStorage.setItem('token',result.data.token)
-                        sessionStorage.setItem('token',result.data.token);
+                        localStorage.setItem('token',result.data.token)
+                        //sessionStorage.setItem('token',result.data.token);
                         this.setState({ 
                             response: "Success",
                             token:true,
